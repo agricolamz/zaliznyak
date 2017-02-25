@@ -1,0 +1,1 @@
+[Zaliznyak dictionary](https://agricolamz.shinyapps.io/zaliznyak/)
