@@ -1,0 +1,22 @@
+---
+title: "Словарь А. А. Зализняка"
+author: "G. Moroz"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(shiny); library(stringr)
+```
+
+```{r, include=FALSE}
+load("ru_reversed.RData")
+```
+
+```{r, echo = FALSE}
+textInput("query", "Type a word", value = "осёл")
+renderTable({
+  ru_reversed[str_sub(ru_reversed$forms, -nchar(input$query), -1) == input$query,]
+})
+```
