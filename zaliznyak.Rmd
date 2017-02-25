@@ -1,5 +1,5 @@
 ---
-title: "Словарь А. А. Зализняка"
+title: "Обратный словарь А. А. Зализняка"
 author: "G. Moroz"
 output: html_document
 runtime: shiny
@@ -7,10 +7,7 @@ runtime: shiny
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(shiny); library(stringr)
-```
-
-```{r, include=FALSE}
+library(stringr)
 load("ru_reversed.RData")
 ```
 
