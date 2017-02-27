@@ -1,5 +1,4 @@
-library(shiny)
-library(stringr)
+library(shiny); library(stringr)
 
 function(input, output) {
   load("ru_reversed.RData")

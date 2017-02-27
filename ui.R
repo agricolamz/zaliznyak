@@ -1,10 +1,11 @@
 fluidPage(
+  titlePanel("Обратный словарь А. А. Зализняка"),
   fluidRow(
-    column(3, wellPanel(
+    column(2, wellPanel(
       textInput("query", "", value = "осёл"),
       submitButton("поиск")
     )),
-    column(6,
+    column(3,
            tableOutput("view")
     )
   )
