@@ -8,7 +8,7 @@ fluidPage(
       sliderInput("l.dist", "РЛ фрагмента после опорного гласного:",
                   min=0, max=5, value=2),
       sliderInput("n.vowels", "номер опорного гласного (с начала слова)",
-                  min=1, max=10, value=3),
+                  min=1, max=10, value=2),
       submitButton("поиск")
     )),
     column(3,
