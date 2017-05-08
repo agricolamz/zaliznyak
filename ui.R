@@ -5,10 +5,8 @@ fluidPage(
       textInput("query", "", value = "паровоз"),
       sliderInput("stress", "Ударный слог с конца слова:",
                   min=1, max=5, value=1),
-      sliderInput("l.dist", "РЛ фрагмента после опорного гласного:",
+      sliderInput("l.dist", "РЛ фрагмента после ударного гласного:",
                   min=0, max=5, value=2),
-      sliderInput("n.vowels", "номер опорного гласного (с начала слова)",
-                  min=1, max=10, value=2),
       submitButton("поиск")
     )),
     column(3,
