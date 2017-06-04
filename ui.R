@@ -12,7 +12,7 @@ fluidPage(
       submitButton("поиск")
     )),
     column(3,
-           tableOutput("view")
+           DT::dataTableOutput("view")
     )
   )
 )
