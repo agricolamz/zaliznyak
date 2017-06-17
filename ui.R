@@ -1,4 +1,7 @@
-fluidPage(
+library(rmarkdown)
+
+navbarPage("",
+           tabPanel("Обратный поиск",
   titlePanel("Обратный поиск в словаре А. А. Зализняка"),
   fluidRow(
     column(3, wellPanel(
@@ -14,6 +17,13 @@ fluidPage(
     column(3,
            DT::dataTableOutput("view")
     )
-  )
-)
+  )),
+tabPanel("Точный поиск",
+         titlePanel("Полный поиск по словарю"),
+         fluidRow(
+           column(3, wellPanel(
+             textInput("fullquery", "", value = "ку"))),
+         column(3,
+                DT::dataTableOutput("fullview")
+         ))))
 
