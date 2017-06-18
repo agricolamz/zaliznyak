@@ -21,8 +21,9 @@ navbarPage("",
 tabPanel("Точный поиск",
          titlePanel("Полный поиск по словарю"),
          fluidRow(
-           column(3, wellPanel(
-             textInput("fullquery", "", value = "ку"))),
+          column(3, wellPanel(
+             textInput("fullquery", "", value = "ку")),
+             submitButton("поиск")),
          column(3,
                 DT::dataTableOutput("fullview")
          ))))
