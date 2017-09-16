@@ -18,13 +18,26 @@ navbarPage("",
            DT::dataTableOutput("view")
     )
   )),
-tabPanel("Точный поиск",
-         titlePanel("Полный поиск по словарю"),
+  tabPanel("Точный поиск по словарю",
+           titlePanel("Точный поиск по словарю"),
+           fluidRow(
+             column(3, wellPanel(
+               textInput("fullquery", "", value = "нога")),
+               sliderInput("l.dist_full", "Значение расстояние ЛВ",
+                           min=1, max=5, value=0),
+               submitButton("поиск")),
+             column(3,
+                    DT::dataTableOutput("fullview")
+             ))),
+tabPanel("Поиск ближайших слов",
+         titlePanel("Поиск ближайших слов по словарю"),
          fluidRow(
           column(3, wellPanel(
-             textInput("fullquery", "", value = "нога")),
+             textInput("simquery", "", value = "нога")),
+             sliderInput("n_best", "Количество слов в выдаче",
+                         min=10, max=40, value=10),
              submitButton("поиск")),
          column(3,
-                DT::dataTableOutput("fullview")
+                DT::dataTableOutput("simview")
          ))))
 
