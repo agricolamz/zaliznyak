@@ -23,8 +23,8 @@ navbarPage("",
            fluidRow(
              column(3, wellPanel(
                textInput("fullquery", "", value = "нога")),
-               sliderInput("l.dist_full", "Значение расстояние ЛВ",
-                           min=1, max=5, value=0),
+               sliderInput("l.dist_full", "Значение расстояния ЛВ",
+                           min=0, max=5, value=0),
                submitButton("поиск")),
              column(3,
                     DT::dataTableOutput("fullview")
