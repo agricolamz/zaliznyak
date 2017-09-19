@@ -9,7 +9,7 @@ function(input, output) {
       slice(1:input$n_best) %>% 
       select(word)
   },
-  options = list(pageLength = 36, dom = 'ftip'))
+  options = list(pageLength = 50, dom = 'ftip'))
   
   output$fullview <- DT::renderDataTable({
     ru_reversed %>% 
@@ -18,7 +18,7 @@ function(input, output) {
       filter(dist == input$l.dist_full) %>% 
       select(word)
     },
-  options = list(pageLength = 36, dom = 'ftip'))
+  options = list(pageLength = 40, dom = 'ftip'))
   
   output$view <- DT::renderDataTable({
     data <- ru_reversed[ru_reversed$stressed_s == input$stress,]

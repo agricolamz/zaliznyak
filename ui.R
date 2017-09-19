@@ -35,7 +35,7 @@ tabPanel("Поиск ближайших слов",
           column(3, wellPanel(
              textInput("simquery", "", value = "нога")),
              sliderInput("n_best", "Количество слов в выдаче",
-                         min=10, max=40, value=10),
+                         min=10, max=50, value=50),
              submitButton("поиск")),
          column(3,
                 DT::dataTableOutput("simview")
