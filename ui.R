@@ -20,11 +20,12 @@ navbarPage("",
   )),
   tabPanel("Точный поиск по словарю",
            titlePanel("Точный поиск по словарю"),
+           "Можно использовать регулярные выражения, например, 'нога.м' или 'нога.*м'",
            fluidRow(
              column(3, wellPanel(
                textInput("fullquery", "", value = "нога")),
-               sliderInput("l.dist_full", "Значение расстояния ЛВ",
-                           min=0, max=5, value=0),
+               sliderInput("n_vowels_before2", "Количество слогов перед ударением (не учитывается, если значение — ноль)",
+                           min=0, max=6, value=0),
                submitButton("поиск")),
              column(3,
                     DT::dataTableOutput("fullview")

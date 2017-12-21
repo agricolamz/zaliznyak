@@ -2,6 +2,9 @@ library(shiny); library(stringr); library(stringdist); library(feather); library
 
 function(input, output) {
   ru_reversed <- read_feather("ru_reversed.feather")
+  ru_reversed %>% 
+    mutate(new_word = str_replace_all(word, "́", "")) ->
+    ru_accentless
   output$simview <- DT::renderDataTable({
     ru_reversed %>% 
       mutate(sim = stringsim(input$simquery, word)) %>% 
@@ -12,11 +15,13 @@ function(input, output) {
   options = list(pageLength = 50, dom = 'ftip'))
   
   output$fullview <- DT::renderDataTable({
-    ru_reversed %>% 
-      mutate(new_word = str_replace_all(word, "́", "")) %>% 
-      mutate(dist = stringdist(input$fullquery, new_word)) %>% 
-      filter(dist == input$l.dist_full) %>% 
-      select(word)
+    ru_accentless %>%
+      filter(str_detect(new_word, input$fullquery[1])) ->
+      full_result
+    if(input$n_vowels_before2 == 0){full_result[,1]} else{
+      full_result$n_vowels_before <- str_count(full_result$new_word, "[аеёиоуыэюя]") - full_result$stressed_s
+      full_result[full_result$n_vowels_before == input$n_vowels_before2,1]
+    }
     },
   options = list(pageLength = 40, dom = 'ftip'))
   
