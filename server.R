@@ -1,42 +1,61 @@
-library(shiny); library(stringr); library(stringdist); library(feather); library(DT); library(dplyr)
+library(shiny)
+library(stringr)
+library(stringdist)
+library(feather)
+library(DT)
+library(dplyr)
 
 function(input, output) {
   ru_reversed <- read_feather("ru_reversed.feather")
-  ru_reversed %>% 
-    mutate(new_word = str_replace_all(word, "́", "")) ->
-    ru_accentless
+  stress <- "́"
+  output$view <- DT::renderDataTable({
+    str_vowel <- rev(str_extract_all(input$query, "[аеёиоуыэюя]")[[1]])[input$stress]
+    str_vowel_id <- rev(str_locate_all(input$query, "[аеёиоуыэюя]")[[1]][,"start"])[input$stress]
+    query_f_fragment <- str_sub(input$query, str_vowel_id+1, nchar(input$query))
+    query_p_fragment <- str_sub(input$query, 1, str_vowel_id-1)
+    ru_reversed %>%
+      filter(stressed_s == input$stress,
+             str_detect(word, paste0(str_vowel, stress))) %>%
+      mutate(stressed_n = str_locate(word, paste0(str_vowel, stress))[1:n()] + 2,
+             fol_fragment = str_sub(word, stressed_n, stressed_n + nchar(input$query)),
+             prev_fragment = str_sub(word, stressed_n - nchar(query_p_fragment) - 2, stressed_n-3),
+             dist = stringdist(fol_fragment, query_f_fragment)) %>%
+      filter(prev_fragment == query_p_fragment,
+             dist <= input$l.dist) ->
+      results
+    if (input$n_vowels_before > 0) {
+      results %>%
+        mutate(fragment = str_sub(word, 1, stressed_n - 3),
+               vowels_before = str_count(fragment, "[аеёиоуыэюя]")) %>%
+        filter(vowels_before == input$n_vowels_before) ->
+        results
+    }
+    results %>% select(word)
+  },
+  options = list(pageLength = 36, dom = 'ftip'))
+  
+  output$fullview <- DT::renderDataTable({
+    ru_reversed %>%
+      mutate(new_word = str_replace_all(word, stress, "")) %>%
+      filter(str_detect(new_word, input$fullquery)) ->
+      full_result
+    if (input$n_vowels_before2 > 0){
+      full_result %>% 
+        mutate(b = str_locate(new_word, input$fullquery)[1:n()]-1,
+               n_vowels = str_count(str_sub(new_word, 1, b), "[аеёиоуыэюя]")) %>%
+        filter(n_vowels == input$n_vowels_before2) ->
+        full_result
+      }
+    full_result[,1]
+  },
+  options = list(pageLength = 40, dom = 'ftip'))
   output$simview <- DT::renderDataTable({
-    ru_reversed %>% 
-      mutate(sim = stringsim(input$simquery, word)) %>% 
-      arrange(desc(sim)) %>% 
-      slice(1:input$n_best) %>% 
+    ru_reversed %>%
+      mutate(sim = stringsim(input$simquery, word)) %>%
+      arrange(desc(sim)) %>%
+      slice(1:input$n_best) %>%
       select(word)
   },
   options = list(pageLength = 50, dom = 'ftip'))
+  }
   
-  output$fullview <- DT::renderDataTable({
-    ru_accentless %>%
-      filter(str_detect(new_word, input$fullquery[1])) ->
-      full_result
-    if(input$n_vowels_before2 == 0){full_result[,1]} else{
-      full_result$n_vowels_before <- str_count(full_result$new_word, "[аеёиоуыэюя]") - full_result$stressed_s
-      full_result[full_result$n_vowels_before == input$n_vowels_before2,1]
-    }
-    },
-  options = list(pageLength = 40, dom = 'ftip'))
-  
-  output$view <- DT::renderDataTable({
-    data <- ru_reversed[ru_reversed$stressed_s == input$stress,]
-    stressed_vowel <- str_locate_all(input$query, "[аеёиоуыэюя]")
-    stressed_vowel <- rev(data.frame(stressed_vowel)$start)[input$stress]
-    pattern <- str_sub(input$query, -nchar(input$query), -stressed_vowel-1)
-    ends <- str_sub(str_replace_all(data$word, "́", ""), -nchar(input$query), -1)
-    data <- data[str_sub(ends, -nchar(input$query), -stressed_vowel-1) == pattern,]
-    ends <- ends[str_sub(ends, -nchar(input$query), -stressed_vowel-1) == pattern]
-    result <- data[stringdist(ends, input$query) <= input$l.dist, 1]
-    if(input$n_vowels_before == 0){result} else{
-      result$n_vowels_before <- str_count(result$word, "[аеёиоуыэюя]") - input$stress
-      result[result$n_vowels_before == input$n_vowels_before, 1]
-      }},
-    options = list(pageLength = 36, dom = 'ftip'))
-}
