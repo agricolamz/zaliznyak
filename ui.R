@@ -24,7 +24,7 @@ navbarPage("",
            fluidRow(
              column(3, wellPanel(
                textInput("fullquery", "", value = "нога")),
-               sliderInput("n_vowels_before2", "Количество слогов перед ударением (не учитывается, если значение — ноль)",
+               sliderInput("n_vowels_before2", "Количество слогов перед первой буквой подстроки",
                            min=0, max=6, value=0),
                submitButton("поиск")),
              column(3,
