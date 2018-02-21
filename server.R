@@ -30,7 +30,7 @@ function(input, output) {
         filter(vowels_before == input$n_vowels_before) ->
         results
     }
-    results %>% select(word)
+    results %>% select(word) %>% distinct()
   },
   options = list(pageLength = 36, dom = 'ftip'))
   
@@ -46,7 +46,7 @@ function(input, output) {
         filter(n_vowels == input$n_vowels_before2) ->
         full_result
       }
-    full_result[,1]
+    full_result[,1] %>% distinct()
   },
   options = list(pageLength = 40, dom = 'ftip'))
   output$simview <- DT::renderDataTable({
@@ -54,7 +54,8 @@ function(input, output) {
       mutate(sim = stringsim(input$simquery, word)) %>%
       arrange(desc(sim)) %>%
       slice(1:input$n_best) %>%
-      select(word)
+      select(word) %>% 
+      distinct()
   },
   options = list(pageLength = 50, dom = 'ftip'))
   }
