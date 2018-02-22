@@ -40,5 +40,9 @@ tabPanel("Поиск ближайших слов",
              submitButton("поиск")),
          column(3,
                 DT::dataTableOutput("simview")
-         ))))
+         ))),
+tabPanel("About",
+         titlePanel("About"),
+         a("Github repository", href = "https://github.com/agricolamz/zaliznyak", target="_blank")
+))
 
