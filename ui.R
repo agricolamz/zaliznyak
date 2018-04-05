@@ -12,6 +12,8 @@ navbarPage("",
                   min=0, max=5, value=0),
       sliderInput("n_vowels_before", "Количество слогов перед искомым фрагментом (не учитывается, если значение — ноль)",
                   min=0, max=6, value=0),
+      sliderInput("l_symbol_after", "Отступ после ударного гласного для применения РЛ:",
+                  min=0, max=5, value=0),
       submitButton("поиск")
     )),
     column(3,

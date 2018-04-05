@@ -11,16 +11,19 @@ function(input, output) {
   output$view <- DT::renderDataTable({
     str_vowel <- rev(str_extract_all(input$query, "[аеёиоуыэюя]")[[1]])[input$stress]
     str_vowel_id <- rev(str_locate_all(input$query, "[аеёиоуыэюя]")[[1]][,"start"])[input$stress]
-    query_f_fragment <- str_sub(input$query, str_vowel_id+1, nchar(input$query))
+    query_f_fragment <- str_sub(input$query, str_vowel_id+1, str_vowel_id+input$l_symbol_after)
+    query_f_fragment_adjusted <- str_sub(input$query, str_vowel_id+1+input$l_symbol_after, nchar(input$query))
     query_p_fragment <- str_sub(input$query, 1, str_vowel_id-1)
     ru_reversed %>%
       filter(stressed_s == input$stress,
              str_detect(word, paste0(str_vowel, stress))) %>%
       mutate(stressed_n = str_locate(word, paste0(str_vowel, stress))[1:n()] + 2,
-             fol_fragment = str_sub(word, stressed_n, stressed_n + nchar(input$query)),
+             fol_fragment = str_sub(word, stressed_n, stressed_n + input$l_symbol_after-1),
+             fol_fragment_adjusted = str_sub(word, stressed_n+input$l_symbol_after, stressed_n + nchar(input$query)),
              prev_fragment = str_sub(word, stressed_n - nchar(query_p_fragment) - 2, stressed_n-3),
-             dist = stringdist(fol_fragment, query_f_fragment)) %>%
+             dist = stringdist(fol_fragment_adjusted, query_f_fragment_adjusted)) %>%
       filter(prev_fragment == query_p_fragment,
+             fol_fragment == query_f_fragment,
              dist <= input$l.dist) ->
       results
     if (input$n_vowels_before > 0) {
@@ -45,7 +48,7 @@ function(input, output) {
                n_vowels = str_count(str_sub(new_word, 1, b), "[аеёиоуыэюя]")) %>%
         filter(n_vowels == input$n_vowels_before2) ->
         full_result
-      }
+    }
     full_result[,1] %>% distinct()
   },
   options = list(pageLength = 40, dom = 'ftip'))
@@ -58,5 +61,4 @@ function(input, output) {
       distinct()
   },
   options = list(pageLength = 50, dom = 'ftip'))
-  }
-  
+}
