@@ -43,6 +43,20 @@ tabPanel("Поиск ближайших слов",
          column(3,
                 DT::dataTableOutput("simview")
          ))),
+tabPanel("Поиск по слогам",
+         titlePanel("Поиск по количеству слогов и ударному слогу"),
+         fluidRow(
+           column(3, wellPanel(
+             sliderInput("syll_number", "Количество слогов:",
+                         min=1, max=13, value=5),
+             sliderInput("syll_stress", "Ударный слог с конца слова:",
+                         min=1, max=9, value=1),
+             submitButton("поиск")
+           )),
+           column(3,
+                  DT::dataTableOutput("syllable")
+           )
+         )),
 tabPanel("About",
          titlePanel("About"),
          a("Github repository", href = "https://github.com/agricolamz/zaliznyak", target="_blank")

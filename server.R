@@ -61,4 +61,13 @@ function(input, output) {
       distinct()
   },
   options = list(pageLength = 50, dom = 'ftip'))
+
+output$syllable <- DT::renderDataTable({
+  ru_reversed %>%
+    filter(stressed_s == input$syll_stress) %>% 
+    mutate(n_syl = str_count(word, "[аеёиоуыэюя]")) %>% 
+    filter(n_syl == input$syll_number) %>% 
+    select("word")
+  },
+options = list(pageLength = 50, dom = 'ftip'))
 }
