@@ -1,3 +1,4 @@
 body, label, input, button, select { 
-      font-family: 'Brill';
+      generic-family: 'serif';
+      font-size: 12px;
  }
