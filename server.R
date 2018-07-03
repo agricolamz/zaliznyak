@@ -9,8 +9,8 @@ function(input, output) {
   ru_reversed <- read_feather("ru_reversed.feather")
   stress <- "́"
   output$view <- DT::renderDataTable({
-    str_vowel <- rev(str_extract_all(input$query, "[аеёиоуыэюя]")[[1]])[input$stress]
-    str_vowel_id <- rev(str_locate_all(input$query, "[аеёиоуыэюя]")[[1]][,"start"])[input$stress]
+    str_vowel <- rev(str_extract_all(input$query, "[аеёиоуыэюяАЕЁИОУЫЭЮЯ]")[[1]])[input$stress]
+    str_vowel_id <- rev(str_locate_all(input$query, "[аеёиоуыэюяАЕЁИОУЫЭЮЯ]")[[1]][,"start"])[input$stress]
     query_f_fragment <- str_sub(input$query, str_vowel_id+1, str_vowel_id+input$l_symbol_after)
     query_f_fragment_adjusted <- str_sub(input$query, str_vowel_id+1+input$l_symbol_after, nchar(input$query))
     query_p_fragment <- str_sub(input$query, 1, str_vowel_id-1)
@@ -29,7 +29,7 @@ function(input, output) {
     if (input$n_vowels_before > 0) {
       results %>%
         mutate(fragment = str_sub(word, 1, stressed_n - 3),
-               vowels_before = str_count(fragment, "[аеёиоуыэюя]")) %>%
+               vowels_before = str_count(fragment, "[аеёиоуыэюяАЕЁИОУЫЭЮЯ]")) %>%
         filter(vowels_before == input$n_vowels_before) ->
         results
     }
@@ -45,7 +45,7 @@ function(input, output) {
     if (input$n_vowels_before2 > 0){
       full_result %>% 
         mutate(b = str_locate(new_word, input$fullquery)[1:n()]-1,
-               n_vowels = str_count(str_sub(new_word, 1, b), "[аеёиоуыэюя]")) %>%
+               n_vowels = str_count(str_sub(new_word, 1, b), "[аеёиоуыэюяАЕЁИОУЫЭЮЯ]")) %>%
         filter(n_vowels == input$n_vowels_before2) ->
         full_result
     }
@@ -65,7 +65,7 @@ function(input, output) {
 output$syllable <- DT::renderDataTable({
   ru_reversed %>%
     filter(stressed_s == input$syll_stress) %>% 
-    mutate(n_syl = str_count(word, "[аеёиоуыэюя]")) %>% 
+    mutate(n_syl = str_count(word, "[аеёиоуыэюяАЕЁИОУЫЭЮЯ]")) %>% 
     filter(n_syl == input$syll_number) %>% 
     select("word")
   },

@@ -1,6 +1,6 @@
 library(rmarkdown)
 
-navbarPage("",
+navbarPage(theme = "my.css", "",
            tabPanel("Обратный поиск",
   titlePanel("Обратный поиск в словаре А. А. Зализняка"),
   fluidRow(
