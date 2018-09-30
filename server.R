@@ -8,6 +8,7 @@ library(dplyr)
 function(input, output) {
   ru_reversed <- read_feather("ru_reversed.feather")
   stress <- "́"
+  stress2 <- "̀"
   output$view <- DT::renderDataTable({
     str_vowel <- rev(str_extract_all(input$query, "[аеёиоуыэюяАЕЁИОУЫЭЮЯ]")[[1]])[input$stress]
     str_vowel_id <- rev(str_locate_all(input$query, "[аеёиоуыэюяАЕЁИОУЫЭЮЯ]")[[1]][,"start"])[input$stress]
@@ -39,7 +40,7 @@ function(input, output) {
   
   output$fullview <- DT::renderDataTable({
     ru_reversed %>%
-      mutate(new_word = str_replace_all(word, stress, "")) %>%
+      mutate(new_word = str_replace_all(word, paste0("[", stress, stress2, "]"), "")) %>%
       filter(str_detect(new_word, input$fullquery)) ->
       full_result
     if (input$n_vowels_before2 > 0){
