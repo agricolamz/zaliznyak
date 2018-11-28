@@ -1,6 +1,8 @@
 library(rmarkdown)
+library(shinythemes)
 
-navbarPage(theme = "my.css", "",
+fluidPage(theme = shinytheme("yeti"),
+navbarPage("",
            tabPanel("Обратный поиск",
   titlePanel("Обратный поиск в словаре А. А. Зализняка"),
   fluidRow(
@@ -60,5 +62,5 @@ tabPanel("Поиск по слогам",
 tabPanel("About",
          titlePanel("About"),
          a("Github repository", href = "https://github.com/agricolamz/zaliznyak", target="_blank")
-))
+)))
 
