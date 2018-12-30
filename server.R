@@ -36,6 +36,7 @@ function(input, output) {
     }
     results %>% select(word) %>% distinct()
   },
+  class="compact",
   options = list(pageLength = 36, dom = 'ftip'))
   
   output$fullview <- DT::renderDataTable({
